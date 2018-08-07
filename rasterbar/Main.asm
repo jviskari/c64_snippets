@@ -1,103 +1,102 @@
-
+; (c) J.Viskari 2018
 ; 10 SYS (49152)
 
 *=$0801
 
-        BYTE    $0E, $08, $0A, $00, $9E, $20, $28,  $34, $39, $31, $35, $32, $29, $00, $00, $00
-
+          BYTE $0E,$08,$0A,$00,$9E,$20,$28,$34,$39,$31,$35,$32,$29,$00,$00,$00
 
 *=$C000
 
 start
-    JSR init
-    SEI
-    ASL $D019
-    LDA #$32      ;set raster interrupt
-    STA $D012
-    CLI    
+          JSR  init      
+          SEI
+          ASL  $D019     
+          LDA  #$32                 ;set raster interrupt
+          STA  $D012     
+          CLI
 
-infinite_loop               
-    LDA #200                
+infinite_loop
+          LDA  #200      
 @poll2
-    CMP $D012
-    BNE @poll2
-    JSR update_lut ;update lookup table at line 200 
+          CMP  $D012     
+          BNE  @poll2    
+          JSR  update_lut          ;update lookup table at line 200
 
-    JMP infinite_loop
+          JMP  infinite_loop
 
 init
-    SEI
-    LDA #$01
-    STA $D01A
-    STA $DC0D
-    LDA #$1B
-    STA $D011
-    STA $D012
-    LDA #<irq_handler
-    STA $0314
-    LDA #>irq_handler
-    STA $0315
-    CLI
-    RTS
+          SEI
+          LDA  #$01      
+          STA  $D01A     
+          STA  $DC0D     
+          LDA  #$1B      
+          STA  $D011     
+          STA  $D012     
+          LDA  #<irq_handler
+          STA  $0314     
+          LDA  #>irq_handler
+          STA  $0315     
+          CLI
+          RTS
 
 irq_handler
-    SEI    
-         
-    LDX #$00
-      
-@loop2          
-    LDA work_mem_start,X
-    LDY lut_start,X
+          SEI
+
+          LDX  #$00      
+
+@loop2
+          LDA  work_mem_start,X
+          LDY  lut_start,X
 
 @loop1
-    DEY
-    BNE @loop1
-    STA $D020
-    STA $D021
-    INX
-    CPX #$41 
-    BNE @loop2  
-   
+          DEY
+          BNE  @loop1    
+          STA  $D020     
+          STA  $D021     
+          INX
+          CPX  #$41      
+          BNE  @loop2    
+
 @exit
-    ASL $D019           
-    JMP $EA7E
-   
+          ASL  $D019     
+          JMP  $EA7E     
+
 ;===============================================================================
 update_lut
-    LDX #$00
-    LDY #$FF          ;value gets modified do not move!
-@loop          
-    LDA $C300,Y
-    STA $C100,X
+          LDX  #$00      
+          LDY  #$FF                    ;value gets modified do not move!
+@loop
+          LDA  $C300,Y   
+          STA  $C100,X   
 
-    LDA $C302,Y
-    STA $C108,X
+          LDA  $C302,Y   
+          STA  $C108,X   
 
-    LDA $C304,Y
-    STA $C110,X
+          LDA  $C304,Y   
+          STA  $C110,X   
 
-    LDA $C306,Y
-    STA $C118,X
+          LDA  $C306,Y   
+          STA  $C118,X   
 
-    LDA $C308,Y
-    STA $C120,X
+          LDA  $C308,Y   
+          STA  $C120,X   
 
-    LDA $C30A,Y
-    STA $C128,X
+          LDA  $C30A,Y   
+          STA  $C128,X   
 
-    LDA $C30C,Y
-    STA $C130,X
+          LDA  $C30C,Y   
+          STA  $C130,X   
 
-    LDA $C30E,Y
-    STA $C138,X
+          LDA  $C30E,Y   
+          STA  $C138,X   
 
-    INY
-    INX
-    CPX #$8 
-    BNE @loop 
-    DEC @loop-1       ;self modifying code
+          INY
+          INX
+          CPX  #$8       
+          BNE  @loop     
+          DEC  @loop-1                    ;self modifying code
 
-    RTS
+          RTS
 ;===============================================================================
 
 *=$C100
@@ -105,9 +104,9 @@ work_mem_start
 *=$C1FF
 work_mem_end
 
-;todo create this at runtime          
+;todo create this at runtime
 *=$C200
-lut_start          
+lut_start
           BYTE $08,$01,$08,$08,$08,$08,$08,$08
           BYTE $08,$01,$08,$08,$08,$08,$08,$08
           BYTE $08,$01,$08,$08,$08,$08,$08,$08
@@ -117,7 +116,7 @@ lut_start
           BYTE $08,$01,$08,$08,$08,$08,$08,$08
           BYTE $08,$01,$08,$08,$08,$08,$08,$08
           BYTE $08,$01,$08,$08,$08,$08,$08,$08
-lut_end 
+lut_end
 
 ; color map
 *=$C300
