@@ -18,8 +18,9 @@ setcolor .macro
         sta screen.border
         .endm
 
-basic_loader .macro
+basic_start .macro
              *=$801
-             ;1sys2064
-             .byte $0b, $08, $01, $00, $9e, $32, $30, $36, $34, $00
+             .byte $0b, $08, $01, $00, $9e
+             .text \1
+             .byte $00
              .endm

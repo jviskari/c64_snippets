@@ -1,8 +1,6 @@
 .include "defines.inc"
 
-*=$801
-    #basic_loader
-
+    #basic_start "2064"
 
 *=MAIN_PROG
 
