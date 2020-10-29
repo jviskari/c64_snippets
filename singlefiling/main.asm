@@ -1,8 +1,8 @@
 .include "defines.inc"
 
 *=$801
-    ;1sys2064
-    .byte $0b, $08, $01, $00, $9e, $32, $30, $36, $34, $00
+    #basic_loader
+
 
 *=MAIN_PROG
 
