@@ -5,58 +5,35 @@
           .byte $0b,$08,$00,$00,$9e,$32,$30,$36,$34,$00,$00,$00
 *=$810
 
-start
-          JSR  init      
-
+          JSR init
 infinite_loop
           LDA  #200      
-_poll2
+-
           CMP  $D012     
-          BNE  _poll2    
+          BNE  -    
           JSR  update_lut          ;update lookup table at line 200
 
           JMP  infinite_loop
 
-init
-          SEI
-          LDA  #$01      
-          STA  $D01A     
-          STA  $DC0D     
-          LDA  #$1B      
-          STA  $D011     
-          STA  $D012     
-          LDA  #<irq_handler
-          STA  $0314     
-          LDA  #>irq_handler
-          STA  $0315
-
-          ASL  $D019     
-          LDA  #$32                 ;set raster interrupt
-          STA  $D012            
-
-          CLI
-
-          RTS
 
 irq_handler
           SEI
 
           LDX  #$00      
 
-_loop2
+-
           LDA  work_mem,X
           LDY  lut_start,X
 
-_loop1
+-
           DEY
-          BNE  _loop1    
+          BNE  -    
           STA  $D020     
           STA  $D021     
           INX
           CPX  #$41      
-          BNE  _loop2    
+          BNE  --    
 
-_exit
           ASL  $D019     
           JMP  $EA7E     
 
@@ -136,6 +113,29 @@ lut2
 ;lut2_end
 .align $100
 work_mem
+;this is not needed after start
+init
+          SEI
+          LDA  #$01      
+          STA  $D01A     
+          STA  $DC0D     
+          LDA  #$1B      
+          STA  $D011     
+          STA  $D012     
+          LDA  #<irq_handler
+          STA  $0314     
+          LDA  #>irq_handler
+          STA  $0315
+
+          ASL  $D019     
+          LDA  #$32                 ;set raster interrupt
+          STA  $D012            
+
+          CLI
+ 
+          RTS
+
+
 ;*=work_mem+$1FF
 ;          .byte $00
 ;work_mem_end;
