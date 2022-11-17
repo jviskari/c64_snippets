@@ -1,4 +1,6 @@
 load "test.tmp" 0
 ll "test.tmp.lbl"
-break .flash
+break 1 .flash if x==50
+r x=0
+command 1 "registers"
 g .start

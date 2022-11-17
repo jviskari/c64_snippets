@@ -6,6 +6,7 @@
 *       = $1000
 start
                 
+              ldx #0
               nop
               nop
               nop 
@@ -17,5 +18,6 @@ start
 flash
 
               inc      $d020
+              inx
               rts 
        
