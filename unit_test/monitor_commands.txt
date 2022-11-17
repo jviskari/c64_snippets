@@ -1,0 +1,7 @@
+ll "test.prg.lbl"
+load "test.prg" 0
+bload "input.bin" 0 .test_input
+break .test_end
+command 1 "bsave \"output.bin\" 0 .test_output .test_output_end;q"
+g .test_start
+
