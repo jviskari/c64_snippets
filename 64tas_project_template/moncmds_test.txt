@@ -1,0 +1,4 @@
+load "test.tmp" 0
+ll "test.tmp.lbl"
+break .flash
+g .start
